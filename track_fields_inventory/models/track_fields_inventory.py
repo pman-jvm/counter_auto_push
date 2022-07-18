@@ -52,6 +52,9 @@ class TrackFieldsInventory(models.Model):
     def notif_counter_price(self):
         model_id = self.env['product.template'].search([('name', '=', self.name)])
         counter_id =self.env['res.partner'].search([('name', '=', 'Counter')]).id
+        apri_id =self.env['res.partner'].search([('name', '=', 'Siti Nur Apriyanti')]).id
+        farietz_id =self.env['res.partner'].search([('name', '=', 'Farietz')]).id
+        miswanto_id =self.env['res.partner'].search([('name', '=', 'Miswanto')]).id
         if (bool(model_id)) == False:
             pass
         else:
@@ -60,22 +63,22 @@ class TrackFieldsInventory(models.Model):
 
             if new_price > old_price:
                 final_price = f'{int(self.list_price):,}'
-                msg_body = 'Team Counter harap segera mengganti harga barang ' + str(self.name) + ' ini NAIK menjadi Rp' + str(final_price)
-                model_id.message_post(body=msg_body, partner_ids=[counter_id], message_type='notification', subtype='mail.mt_comment')
-
-                # msg_body_wh = 'Team Warehouse harap segera mengganti harga barang ' + str(self.name) + ' ini NAIK menjadi Rp' + str(final_price)
-                # model_id.message_post(body=msg_body_wh, partner_ids=[apri_id], message_type='notification', subtype='mail.mt_comment')
+                msg_body = 'Team Counter & Warehouse harap segera mengganti harga barang ' + str(self.name) + ' ini NAIK menjadi Rp' + str(final_price)
+                model_id.message_post(body=msg_body, partner_ids=[counter_id, miswanto_id, farietz_id, apri_id], type='danger', message_type='notification', subtype='mail.mt_comment')
             else:
                 final_price = f'{int(self.list_price):,}'
                 msg_body = 'Team Counter harap segera mengganti harga barang ' + str(self.name) + ' ini TURUN menjadi Rp' + str(final_price)
-                model_id.message_post(body=msg_body, partner_ids=[counter_id], message_type='notification', subtype='mail.mt_comment')
+                model_id.message_post(body=msg_body, partner_ids=[counter_id, miswanto_id, farietz_id, apri_id], type='danger', message_type='notification', subtype='mail.mt_comment')
 
     @api.onchange('barcode')
     def notif_counter_barcode(self):
         model_id = self.env['product.template'].search([('name', '=', self.name)])
         counter_id =self.env['res.partner'].search([('name', '=', 'Counter')]).id
+        apri_id =self.env['res.partner'].search([('name', '=', 'Siti Nur Apriyanti')]).id
+        farietz_id =self.env['res.partner'].search([('name', '=', 'Farietz')]).id
+        miswanto_id =self.env['res.partner'].search([('name', '=', 'Miswanto')]).id
         if (bool(model_id)) == False:
             pass
         else:
             msg_body = 'Team Counter harap segera mengganti barcode barang ' + str(self.name) + ' ini menjadi ' + str(self.barcode)
-            model_id.message_post(body=msg_body, partner_ids=[counter_id], message_type='notification', subtype='mail.mt_comment')
+            model_id.message_post(body=msg_body, partner_ids=[counter_id, miswanto_id, farietz_id, apri_id], type='danger', message_type='notification', subtype='mail.mt_comment')
