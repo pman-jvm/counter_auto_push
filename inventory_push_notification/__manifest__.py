@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
-    'name': 'Track Inventory',
+    'name': 'Inventory Notification',
     'author': 'Altela Softwares',
     'version': '12.0.1.0.0',
-    'summary': 'Create history into chatter after editing inventory',
-    'license': 'LGPL-3',
+    'summary': 'Get certain user notified when barcode or sales price are changed through chat',
+    'license': 'OPL-1',
     'sequence': 1,
-    'description': """Create history into chatter after editing inventory""",
-    'category': 'Extra Tools',
+    'description': """Get certain user notified when barcode or sales price are changed through chat""",
+    'category': 'Inventory',
     'website': 'https://www.altela.net',
     'depends': [
         'stock',
+        'mail',
     ],
     'images': [
         'static/description/assets/banner.gif',
