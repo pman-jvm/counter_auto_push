@@ -1,48 +1,76 @@
-from odoo import models, fields, api
+from odoo import models, api
 
 
 class InventoryPushNotification(models.Model):
     _name = 'product.template'
     _inherit = ['product.template', 'mail.thread']
 
-    # Mengepush Notif Sales Price
     @api.onchange('list_price')
-    def notif_counter_price_no(self):
+    def new_price_value(self):
+        global new_price_value
+        new_price_value = self.list_price
+
+    # @api.onchange('barcode')
+    # def new_barcode_value(self):
+    #     global new_barcode_value
+    #     new_barcode_value = self.barcode
+
+    # Mengepush Notif Sales Price
+    @api.multi
+    def write(self, values):
+
+        ### Notifikasi Harga Sales Price
+        global new_price_value
+        # global new_barcode_value
+
+        print(self.id)
+
         model_id = self.env['product.template'].search([('name', '=', self.name)])
-        counter_id =self.env['res.partner'].search([('name', '=', 'Counter')]).id
-        apri_id =self.env['res.partner'].search([('name', '=', 'Siti Nur Apriyanti')]).id
+        print(model_id.name)
+
+        counter_id = self.env['res.partner'].search([('name', '=', 'Counter')]).id
+        apri_id = self.env['res.partner'].search([('name', '=', 'Siti Nur Apriyanti')]).id
         # farietz_id =self.env['res.partner'].search([('name', '=', 'Farietz')]).id
-        warehouse_id =self.env['res.partner'].search([('name', '=', 'Warehouse')]).id
+        warehouse_id = self.env['res.partner'].search([('name', '=', 'Warehouse')]).id
+
         if (bool(model_id)) == False:
             pass
         else:
             old_price = model_id.list_price
-            new_price = self.list_price
+            new_price = new_price_value
 
             if new_price > old_price:
-                final_price = f'{int(self.list_price):,}'
-                msg_body = 'Team Counter & Warehouse harap segera mengganti harga barang ' + str(self.name) + ' ini NAIK menjadi Rp' + str(final_price)
-                model_id.message_post(body=msg_body, partner_ids=[counter_id, warehouse_id, apri_id], type='danger', message_type='notification', subtype='mail.mt_comment')
+                final_price = f'{int(new_price):,}'
+                msg_body = 'Team Counter & Warehouse harap segera mengganti harga barang ' + str(
+                    self.name) + ' ini NAIK menjadi Rp' + str(final_price)
+                model_id.message_post(body=msg_body, partner_ids=[counter_id, apri_id],
+                                      message_type='notification', subtype='mail.mt_comment')
             else:
-                final_price = f'{int(self.list_price):,}'
-                msg_body = 'Team Counter & Warehouse harap segera mengganti harga barang ' + str(self.name) + ' ini TURUN menjadi Rp' + str(final_price)
-                model_id.message_post(body=msg_body, partner_ids=[counter_id, warehouse_id, apri_id], type='danger', message_type='notification', subtype='mail.mt_comment')
+                final_price = f'{int(new_price):,}'
+                msg_body = 'Team Counter & Warehouse harap segera mengganti harga barang ' + str(
+                    self.name) + ' ini TURUN menjadi Rp' + str(final_price)
+                model_id.message_post(body=msg_body, partner_ids=[counter_id, apri_id],
+                                      message_type='notification', subtype='mail.mt_comment')
 
-    # Mengepush Notif Barcode
-    @api.onchange('barcode')
-    def notif_counter_barcode(self):
-        model_id = self.env['product.template'].search([('name', '=', self.name)])
-        counter_id =self.env['res.partner'].search([('name', '=', 'Counter')]).id
-        apri_id =self.env['res.partner'].search([('name', '=', 'Siti Nur Apriyanti')]).id
-        # farietz_id =self.env['res.partner'].search([('name', '=', 'Farietz')]).id
-        warehouse_id =self.env['res.partner'].search([('name', '=', 'Warehouse')]).id
-        if (bool(model_id)) == False:
-            pass
-        else:
-            msg_body = 'Team Counter & Warehouse harap segera mengganti barcode barang ' + str(self.name) + ' ini menjadi ' + str(self.barcode)
-            model_id.message_post(body=msg_body, partner_ids=[counter_id, warehouse_id, apri_id], type='danger', message_type='notification', subtype='mail.mt_comment')
+        override_write = super(InventoryPushNotification, self).write(values)
+        return override_write
 
 
+    # # Mengepush Notif Barcode
+    # @api.onchange('barcode')
+    # def notif_counter_barcode(self):
+    #     model_id = self.env['product.template'].search([('name', '=', self.name)])
+    #     counter_id =self.env['res.partner'].search([('name', '=', 'Counter')]).id
+    #     apri_id =self.env['res.partner'].search([('name', '=', 'Siti Nur Apriyanti')]).id
+    #     # farietz_id =self.env['res.partner'].search([('name', '=', 'Farietz')]).id
+    #     warehouse_id =self.env['res.partner'].search([('name', '=', 'Warehouse')]).id
+    #     if (bool(model_id)) == False:
+    #         pass
+    #     else:
+    #         msg_body = 'Team Counter & Warehouse harap segera mengganti barcode barang ' + str(self.name) + ' ini menjadi ' + str(self.barcode)
+    #         model_id.message_post(body=msg_body, partner_ids=[counter_id, warehouse_id, apri_id], type='danger', message_type='notification', subtype='mail.mt_comment')
+    #
+    #
 
 
 
