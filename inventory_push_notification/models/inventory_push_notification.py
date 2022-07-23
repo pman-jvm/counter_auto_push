@@ -19,11 +19,11 @@ class InventoryPushNotification(models.Model):
             if new_price > old_price:
                 final_price = f'{new_price:,}'
                 msg_body = 'Team Counter & Warehouse harap segera mengganti harga barang ' + str(self.name) + ' ini NAIK menjadi Rp' + str(final_price)
-                master_product.message_post(body=msg_body, partner_ids=[counter_id], message_type='notification', subtype='mail.mt_comment')
+                master_product.message_post(body=msg_body, partner_ids=[counter_id, apri_id, warehouse_id], message_type='notification', subtype='mail.mt_comment')
             else:
                 final_price = f'{new_price:,}'
                 msg_body = 'Team Counter & Warehouse harap segera mengganti harga barang ' + str(self.name) + ' ini TURUN menjadi Rp' + str(final_price)
-                master_product.message_post(body=msg_body, partner_ids=[counter_id], message_type='notification', subtype='mail.mt_comment')
+                master_product.message_post(body=msg_body, partner_ids=[counter_id, apri_id, warehouse_id], message_type='notification', subtype='mail.mt_comment')
 
         # Notifikasi pesaan mengganti barcode
         if new_changes.get('barcode'):
@@ -31,7 +31,7 @@ class InventoryPushNotification(models.Model):
             new_barcode = str(new_changes["barcode"])
             if old_barcode != new_barcode:
                 msg_body = 'Team Counter & Warehouse harap segera mengganti barcode ' + str(self.name) + ' ini menjadi ' + str(new_barcode)
-                master_product.message_post(body=msg_body, partner_ids=[counter_id], message_type='notification', subtype='mail.mt_comment')
+                master_product.message_post(body=msg_body, partner_ids=[counter_id, apri_id, warehouse_id], message_type='notification', subtype='mail.mt_comment')
 
         override_write = super(InventoryPushNotification, self).write(new_changes)
         return override_write
