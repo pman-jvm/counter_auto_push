@@ -3,7 +3,7 @@
 {
     'name': 'Inventory Notification',
     'author': 'Altela Softwares',
-    'version': '12.0.1.0.0',
+    'version': '12.0.2.0.0',
     'summary': 'Get certain user notified when barcode or sales price are changed through chat',
     'license': 'OPL-1',
     'sequence': 1,
